@@ -1,0 +1,1041 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>APK Zone App Downloader</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"> <!-- For Icons -->
+
+    <style>
+        /* --- Base Styles (Dark Mode Default) --- */
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            background-color: #1a202c; /* Dark background */
+            color: #e2e8f0; /* Light text */
+            padding-top: 60px; /* Space for fixed header */
+            padding-bottom: 20px; /* Space at the bottom */
+            overflow-x: hidden; /* Prevent horizontal scroll when sidebar is out */
+            transition: background-color 0.3s ease, color 0.3s ease; /* Smooth mode transition */
+        }
+
+        .header {
+            background-color: #2d3748; /* Slightly lighter dark */
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            position: fixed; /* Keep header at the top */
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 100; /* Stay above content */
+            box-sizing: border-box; /* Include padding in width */
+            transition: background-color 0.3s ease, color 0.3s ease; /* Smooth mode transition */
+        }
+        .header .left-section {
+            display: flex;
+            align-items: center;
+        }
+        .header .logo {
+            font-size: 1.5em; /* Adjusted font size for header */
+            margin-right: 10px;
+            color: #667eea; /* Example accent color */
+            font-weight: 700;
+        }
+         .header .logo i { /* Style for Font Awesome Robot */
+             color: #667eea;
+             margin-right: 100px;
+         }
+        .header .title {
+            display: flex;
+            flex-direction: column;
+        }
+        .header .title h1 {
+            font-size: 1em; /* Adjusted font size */
+            margin: 0;
+            color: inherit; /* Inherit color from header */
+            font-weight: 700;
+        }
+         .header .title p {
+             font-size: 0.7em; /* Adjusted font size */
+             margin: 0;
+             color: #a0aec0; /* Keep a softer color */
+         }
+        .header .right-section {
+            display: flex;
+            align-items: center;
+        }
+        .header .icon {
+            font-size: 1.3em;
+            margin-left: 15px;
+            cursor: pointer;
+            color: #a0aec0;
+            transition: color 0.2s ease;
+        }
+         .header .icon:hover { color: #e2e8f0; }
+
+
+        /* --- Sidebar Styles --- */
+        #sidebar-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7); /* Semi-transparent overlay */
+            z-index: 150; /* Above content, below sidebar */
+            display: none; /* Hidden by default */
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        #sidebar-overlay.visible {
+            display: block;
+            opacity: 1;
+        }
+
+        #sidebar {
+            position: fixed;
+            top: 0;
+            left: -280px; /* Start off-screen */
+            width: 280px; /* Sidebar width */
+            height: 100%;
+            background-color: #2d3748; /* Dark background */
+            z-index: 200; /* Above overlay and content */
+            transition: left 0.3s ease, background-color 0.3s ease; /* Smooth transition */
+            padding-top: 70px; /* Space from the top (header) */
+            box-sizing: border-box;
+            overflow-y: auto; /* Add scroll if content overflows */
+        }
+
+        #sidebar.open {
+            left: 0; /* Slide in */
+        }
+
+        #sidebar-close-icon {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 1.5em;
+            color: #a0aec0;
+            cursor: pointer;
+            transition: color 0.2s ease;
+        }
+        #sidebar-close-icon:hover { color: #e2e8f0; }
+
+        #sidebar ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        #sidebar li {
+            margin-bottom: 5px;
+        }
+
+        #sidebar a {
+            display: flex;
+            align-items: center;
+            padding: 12px 20px;
+            color: #e2e8f0;
+            text-decoration: none;
+            font-size: 1.1em;
+            transition: background-color 0.2s ease, color 0.2s ease;
+        }
+
+        #sidebar a:hover,
+         #sidebar a.active { /* Active state style */
+            background-color: #4a5568; /* Darker background on hover/active */
+            color: #fff;
+        }
+
+
+        #sidebar a .icon-circle {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            font-size: 1em;
+            color: white; /* Icon color inside circle */
+             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Subtle shadow */
+        }
+
+        /* Specific icon circle colors from the image */
+        #sidebar a[data-category="All"] .icon-circle { background-color: #667eea; } /* Home Blue */
+        #sidebar a[data-category="Games"] .icon-circle { background-color: #fc8181; } /* Games Red */
+        #sidebar a[data-category="Apps"] .icon-circle { background-color: #9f7aea; } /* Apps Purple */
+        #sidebar a[data-category="Blog"] .icon-circle { background-color: #f6ad55; } /* Blog Orange */
+        #sidebar a[data-category="FAQ"] .icon-circle { background-color: #48bb78; } /* FAQ Green */
+
+
+        /* --- Main Content Styles --- */
+        .search-section {
+            text-align: center;
+            padding: 40px 20px;
+            background-color: inherit; /* Inherit from body */
+            transition: background-color 0.3s ease;
+        }
+        .search-section h2 {
+            font-size: 2em;
+            margin-bottom: 10px;
+            color: inherit; /* Inherit from body */
+            font-weight: 700;
+        }
+        .search-section p {
+            font-size: 1.1em;
+            color: #a0aec0; /* Keep a softer color */
+            margin-bottom: 25px;
+        }
+        .search-input-container {
+             display: flex; /* Keep flex display as per original request */
+             max-width: 500px;
+             margin: 0 auto;
+             background-color: #2d3748; /* Lighter dark */
+             border-radius: 30px; /* Pill shape */
+             overflow: hidden;
+             padding: 5px;
+             align-items: center;
+             transition: background-color 0.3s ease;
+         }
+         /* Remove .visible toggle as search bar should always be visible based on images */
+         /* #search-input-container.visible { display: flex; } */
+
+        .search-input-container .search-icon {
+            padding: 10px 15px;
+            color: #a0aec0; /* Keep a softer color */
+            font-size: 1.1em;
+        }
+        .search-input-container input[type="text"] {
+            flex-grow: 1;
+            padding: 10px 0;
+            border: none;
+            outline: none;
+            background: none;
+            color: inherit; /* Inherit from container */
+            font-size: 1em;
+        }
+         .search-input-container input::placeholder { color: #a0aec0; opacity: 0.7; } /* Placeholder style */
+
+        .search-input-container button {
+            background-color: #48bb78; /* Green */
+            color: white;
+            border: none;
+            padding: 10px 25px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background-color 0.3s ease;
+        }
+        .search-input-container button:hover { background-color: #38a169; /* Darker Green */ }
+
+
+        /* App List View */
+        .container {
+            max-width: 900px;
+            margin: auto;
+            padding: 0 20px; /* Add horizontal padding */
+        }
+
+        #app-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); /* Adjust based on preference */
+            gap: 20px;
+            margin-top: 20px;
+        }
+        .app-item {
+            background-color: #2d3748; /* Card background */
+            border-radius: 10px;
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease; /* Smooth transition */
+            display: flex;
+            flex-direction: column;
+            overflow: hidden; /* Clip anything outside border-radius (for rounded corners) */
+        }
+        .app-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Style for the image container/wrapper */
+        .app-item .img-wrapper {
+             width: 100%;
+             height: 120px; /* Fixed height for the image area */
+             position: relative; /* Needed for absolute positioned badges */
+             overflow: hidden; /* Important to hide any distortion outside the box */
+             border-top-left-radius: 10px;
+             border-top-right-radius: 10px;
+             /* Background color is less relevant now as the image will fill */
+             /* background-color: #4a5568; */
+        }
+
+        /* Style for the image itself */
+        .app-item .img-wrapper img {
+            display: block; /* Remove extra space below image */
+            width: 100%; /* Make image take full width of wrapper */
+            height: 100%; /* Make image take full height of wrapper */
+
+            /* THIS IS THE KEY PART FOR FILLING THE ENTIRE BOX (ACCEPTING DISTORTION): */
+            object-fit: fill; /* Scales the image to fill the container exactly. THIS MAY DISTORT THE IMAGE'S ASPECT RATIO. */
+            /* object-position: center; */ /* Not needed with object-fit: fill */
+
+             /* Reset default image styling */
+             border: none;
+             padding: 0;
+             margin: 0;
+        }
+
+
+        .app-item .item-details {
+            padding: 10px;
+            flex-grow: 1; /* Allow details to take space */
+            display: flex;
+            flex-direction: column;
+        }
+        .app-item h3 {
+            font-size: 1em;
+            margin: 0 0 5px 0;
+            color: inherit; /* Inherit from item */
+            font-weight: 500;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap; /* Prevent wrapping */
+        }
+         .app-item .category {
+             font-size: 0.8em;
+             color: #48bb78; /* Green - specific color */
+             margin-bottom: 8px;
+         }
+         .app-item .version-size {
+             font-size: 0.7em;
+             color: #a0aec0; /* Softer color */
+             margin-top: auto; /* Push to bottom */
+             display: flex;
+             justify-content: space-between;
+         }
+         .app-item .version-size span i { margin-right: 3px; }
+
+        /* Badges (Optional - requires data) */
+         .badges {
+             position: absolute;
+             top: 5px;
+             left: 5px;
+             right: 5px;
+             display: flex;
+             justify-content: space-between;
+             pointer-events: none; /* Allow clicks to pass through */
+             z-index: 10; /* Ensure badges are above the image */
+         }
+        .badge {
+            font-size: 0.7em;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-weight: bold;
+            color: white;
+            margin-left: 5px;
+             box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+        }
+        .badge.new { background-color: #63b3ed; } /* Blue */
+        .badge.mod { background-color: #fc8181; } /* Red */
+
+
+        /* App Detail View - This section is now unused in user.html but kept for context */
+        /* #app-detail { ... } */
+
+        .loading-message, .error-message, .info-message {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 1.1em;
+            color: #a0aec0; /* Softer color */
+        }
+        .error-message { color: #fc8181; } /* Red */
+        .info-message { font-style: italic; }
+
+
+         /* --- Light Mode Styles --- */
+         body.light-mode {
+             background-color: #eef2f7; /* Light background */
+             color: #333; /* Dark text */
+         }
+
+         .light-mode .header {
+             background-color: #ffffff; /* White header */
+             color: #333;
+             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+         }
+
+         .light-mode .header .title p { color: #555; } /* Darker soft color */
+         .light-mode .header .icon { color: #555; }
+         .light-mode .header .icon:hover { color: #333; }
+
+
+         .light-mode #sidebar {
+             background-color: #ffffff; /* White sidebar */
+             color: #333;
+         }
+         .light-mode #sidebar-close-icon { color: #555; }
+         .light-mode #sidebar-close-icon:hover { color: #333; }
+
+         .light-mode #sidebar a { color: #333; }
+         .light-mode #sidebar a:hover,
+         .light-mode #sidebar a.active {
+             background-color: #e2e8f0; /* Light background hover */
+             color: #1a202c; /* Dark text hover */
+         }
+
+         .light-mode .search-section h2,
+         .light-mode .search-section p { color: #333; } /* Dark text */
+
+         .light-mode .search-input-container { background-color: #e2e8f0; } /* Lighter light */
+         .light-mode .search-input-container .search-icon { color: #777; }
+         .light-mode .search-input-container input[type="text"] { color: #333; }
+         .light-mode .search-input-container input::placeholder { color: #777; opacity: 0.9; }
+
+
+         .light-mode .app-item {
+             background-color: #ffffff; /* White card */
+             color: #333;
+             border: 1px solid #e0e0e0;
+             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08);
+         }
+         .light-mode .app-item:hover { box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1); }
+
+        /* Light mode for the image wrapper and image */
+         .light-mode .app-item .img-wrapper {
+              border: 1px solid #d0d0d0; /* Optional border on wrapper */
+              /* background-color is less relevant for light mode object-fit: fill */
+         }
+          .light-mode .app-item .img-wrapper img {
+              /* No specific changes needed here, styles inherited */
+          }
+
+
+         .light-mode .app-item .category { color: #059669; } /* Darker green */
+         .light-mode .app-item .version-size { color: #555; }
+
+
+         /* App Detail View - Styles for details.html copied here for consistency */
+         /* Note: These styles target elements *within* .details-container in details.html */
+         .light-mode .details-container { /* Use a class for the main content container */
+             background-color: #ffffff; /* White background */
+             color: #333;
+             border: 1px solid #e0e0e0;
+             box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+         }
+
+         .light-mode .details-section-title {
+             color: #333; /* Dark color for titles */
+             border-bottom-color: #ccc; /* Lighter separator */
+         }
+
+         .light-mode .details-container h2 { color: inherit; } /* Inherit color from container */
+
+         .light-mode .details-container img {
+              border: 1px solid #d0d0d0;
+              box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+         }
+
+         .light-mode .detail-item {
+             background-color: #e2e8f0; /* Light background for items */
+         }
+         .light-mode .detail-item i { color: #059669; } /* Darker green icon color */
+         .light-mode .detail-item .text .label { color: #555; } /* Darker soft color */
+         .light-mode .detail-item .text .value { color: #333; } /* Dark text */
+
+
+         .light-mode .user-rating-container .stars { color: #f59e0b; } /* Darker yellow stars */
+          .light-mode .user-rating-container .stars .filled { color: #f59e0b; }
+         .light-mode .user-rating-container .stars .fa-star { color: #ccc; } /* Lighter empty star color */
+         .light-mode .user-rating-container .rating-count { color: #555; }
+
+         .light-mode #detail-download-btn { background-color: #059669; } /* Darker green */
+         .light-mode #detail-download-btn:hover { background-color: #047857; }
+
+
+         .light-mode .features-list li {
+             background-color: #e2e8f0; /* Light background for items */
+             color: #555;
+         }
+         .light-mode .features-list li i { color: #d97706; } /* Darker yellow checkmark */
+
+         .light-mode .about-content {
+             background-color: #e2e8f0; /* Light background for content */
+             color: #555;
+         }
+
+          .light-mode .bottom-buttons .back-btn {
+              background-color: #9ca3af; /* Darker gray */
+              color: white;
+          }
+          .light-mode .bottom-buttons .back-btn:hover { background-color: #6b7280; }
+
+
+         .light-mode .loading-message,
+         .light-mode .error-message,
+         .light-mode .info-message { color: #555; }
+         .light-mode .error-message { color: #dc2626; } /* Red */
+        .footer {
+
+            padding: 30px 0;
+            font-family: Arial, sans-serif;
+            text-align: center;
+            border-top: 1px solid #eee;
+        }
+        .social-icons {
+            margin-bottom: 20px;
+        }
+        .social-icon {
+            margin: 0 15px;
+            display: inline-block;
+        }
+        .copyright {
+            margin-bottom: 15px;
+            color: #666;
+            font-size: 14px;
+        }
+        .footer-links a {
+            color: #555;
+            text-decoration: none;
+            margin: 0 12px;
+            font-size: 13px;
+            transition: color 0.3s;
+        }
+        .footer-links a:hover {
+            color: #000;
+        }
+        .social-icon svg {
+            width: 24px;
+            height: 24px;
+            transition: transform 0.3s;
+        }
+        .social-icon:hover svg {
+            transform: scale(1.2);
+        }
+
+
+    </style>
+
+</head>
+<body class="dark-mode"> <!-- Default to dark mode. Class will be updated by JS -->
+
+<div class="header">
+    <div class="left-section">
+         <i class="fas fa-bars icon" id="menu-toggle-icon"></i> <!-- Menu Icon -->
+        <div class="title">
+             <div class="logo"><i class="fas fa-robot"></i> APK Zone</div> <!-- Corrected icon class -->
+             <p>Download & enjoy</p>
+        </div>
+    </div>
+    <div class="right-section">
+         <!-- Mode Toggle Icon (Starts as sun, implies dark mode). Updated by JS -->
+         <i class="fas fa-sun icon" id="mode-toggle-icon"></i>
+        <i class="fas fa-search icon" id="search-toggle-icon"></i> <!-- Search Icon -->
+    </div>
+</div>
+
+<!-- --- Sidebar Menu --- -->
+<div id="sidebar-overlay"></div>
+<div id="sidebar">
+    <i class="fas fa-times" id="sidebar-close-icon"></i>
+    <ul>
+        <li>
+            <a href="#" data-category="All">
+                <span class="icon-circle"><i class="fas fa-home"></i></span> Home
+            </a>
+        </li>
+        <li>
+            <a href="#" data-category="Games">
+                 <span class="icon-circle"><i class="fas fa-gamepad"></i></span> Games
+            </a>
+        </li>
+        <li>
+            <a href="#" data-category="Apps">
+                 <span class="icon-circle"><i class="fas fa-mobile-alt"></i></span> Apps
+            </a>
+        </li>
+         <li>
+            <a href="Blog.html" data-category="Blog">
+                 <span class="icon-circle"><i class="fas fa-book-open"></i></span> Blog
+            </a>
+        </li>
+         <li>
+            <a href="#" data-category="FAQ">
+                 <span class="icon-circle"><i class="fas fa-question"></i></span> FAQ
+            </a>
+        </li>
+        <!-- Add more categories as needed -->
+    </ul>
+</div>
+
+
+<div class="search-section">
+    <h2>Search here</h2>
+    <p>Search here your favourite games or applications to download it instantly.</p>
+     <!-- Search input container - Toggled visibility -->
+     <div class="search-input-container" id="search-bar-container">
+         <span class="search-icon"><i class="fas fa-search"></i></span>
+         <input type="text" id="search-input" placeholder="Type here...">
+         <button id="search-go-btn">GO</button>
+     </div>
+</div>
+
+
+<div class="container">
+
+    <div id="app-list">
+        <p class="loading-message">Loading Apps...</p>
+        <!-- Apps will be loaded here by JavaScript -->
+    </div>
+
+     <!-- App Detail View - This section is now in details.html -->
+     <!-- The div below is kept but will always be display: none -->
+     <div id="app-detail" style="display: none;">
+         <!-- Content will be loaded in details.html -->
+     </div>
+
+    <!-- Placeholder for Blog/FAQ or other non-app content -->
+    <div id="info-content" class="info-message" style="display: none;">
+        <h2 id="info-title"></h2>
+        <p id="info-description"></p>
+         <button id="back-from-info-btn" class="back-btn" style="margin-top: 20px;">Back to Home</button>
+    </div>
+
+
+</div>
+    <!-- --- Footer --- -->
+<footer class="footer">
+    <div class="social-icons">
+        <a href="https://www.instagram.com/apkz.one?igsh=YzBuaGVzaDRub3Ux" class="social-icon">
+            <svg viewBox="0 0 24 24" style="fill:#e1306c">
+                <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+            </svg>
+        </a>
+        <a href="https://youtube.com/@fullh.dmovie?si=edWEDi8PCx-Zj_sv" class="social-icon">
+            <svg viewBox="0 0 24 24" style="fill:#ff0000">
+                <path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"/>
+            </svg>
+        </a>
+        <a href="https://t.me/+mu8H74OWEV43OTNl" class="social-icon">
+            <svg viewBox="0 0 24 24" style="fill:#0088cc">
+                <path d="M9.417 15.181l-.397 5.584c.568 0 .814-.244 1.109-.537l2.663-2.545 5.518 4.041c1.012.564 1.725.267 1.998-.931l3.622-16.972.001-.001c.321-1.496-.541-2.081-1.527-1.714l-21.29 8.151c-1.453.564-1.431 1.374-.247 1.741l5.443 1.693 12.643-7.911c.595-.394 1.136-.176.691.218z"/>
+            </svg>
+        </a>
+    </div>
+    <div class="copyright">
+        © 2025 YourCompany. All Rights Reserved.
+    </div>
+    <div class="footer-links">
+        <a href="Privacy.html">Privacy Policy</a>
+        <a href="About Us.html">About Us</a>
+        <a href="Contact.html">Contact Us</a>
+        <a href="Term.html">Terms of Service</a>
+    </div>
+</footer>
+<!-- Load Firebase config and services -->
+<script type="module">
+    // Firebase SDKs ko import karein
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js';
+    import { getFirestore, collection, getDocs } from 'https://www.gstatic.com/firebasejs/9.0.0/firebase-firestore.js';
+
+    // आपकी Google Firebase project configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyDXyZojvzlB7XQXOFw6n_kWK07mvtzVzYY", // <-- Your API Key
+      authDomain: "apps-1945d.firebaseapp.com", // <-- Your Auth Domain
+      projectId: "apps-1945d",   // <-- Your Project ID
+      storageBucket: "apps-1945d.firebasestorage.app", // <-- Your Storage Bucket (optional)
+      messagingSenderId: "922330585425", // <-- Your Messaging Sender ID (optional)
+      appId: "1:922330585425:web:455c102287f072a78f1b70"             // <-- Your App ID
+      // measurementId: "YOUR_MEASUREMENT_ID" // <-- Uncomment if using Analytics
+    };
+
+    // Firebase को initialize करें
+    const app = initializeApp(firebaseConfig);
+
+    // Firestore service का instance प्राप्त करें
+    const db = getFirestore(app);
+
+
+    // --- DOM Elements ---
+    const body = document.body; // Reference to the body for mode toggle
+    const appListDiv = document.getElementById('app-list');
+    // const appDetailDiv = document.getElementById('app-detail'); // Removed as it's in details.html
+     const infoContentDiv = document.getElementById('info-content'); // New info content div
+     const infoTitle = document.getElementById('info-title'); // Title in info content
+     const infoDescription = document.getElementById('info-description'); // Description in info content
+     const backFromInfoBtn = document.getElementById('back-from-info-btn'); // Button in info content
+
+
+    // Detail page elements removed as they are in details.html
+    /*
+    const detailImage = document.getElementById('detail-image');
+    const detailName = document.getElementById('detail-name');
+    const detailDescription = document.getElementById('detail-description');
+     const detailCategorySpan = document.querySelector('#detail-category span'); // Select the span inside for text
+     const detailVersionSpan = document.querySelector('#detail-version span');
+     const detailSizeSpan = document.querySelector('#detail-size span');
+    const detailDownloadBtn = document.getElementById('detail-download-btn');
+    const backToListBtn = document.getElementById('back-to-list-btn');
+    */
+
+
+    // Sidebar elements
+    const menuToggleIcon = document.getElementById('menu-toggle-icon');
+    const sidebarOverlay = document.getElementById('sidebar-overlay');
+    const sidebar = document.getElementById('sidebar');
+    const sidebarCloseIcon = document.getElementById('sidebar-close-icon');
+    const sidebarMenuItems = document.querySelectorAll('#sidebar a[data-category]'); // Get all menu links with data-category
+
+    // Search elements
+    const searchToggleIcon = document.getElementById('search-toggle-icon');
+    const searchBarContainer = document.getElementById('search-bar-container');
+    const searchInput = document.getElementById('search-input');
+    const searchGoBtn = document.getElementById('search-go-btn');
+
+     // Mode Toggle Element
+    const modeToggleIcon = document.getElementById('mode-toggle-icon');
+
+
+    let allApps = []; // Store all apps fetched from Firebase
+    let currentApps = []; // Store apps currently displayed (result of filtering/search)
+    let activeCategory = 'All'; // Keep track of the currently selected category
+
+
+    // --- Helper Functions ---
+
+    // Function to show a specific section and hide others
+    function showSection(sectionId) {
+         // Hide all main content sections
+        appListDiv.style.display = 'none';
+        // appDetailDiv.style.display = 'none'; // Details are in a new page
+         infoContentDiv.style.display = 'none';
+        // searchBarContainer.classList.remove('visible'); // Don't hide search on section switch, only on toggle click
+
+
+        // Show the requested section
+        if (sectionId === 'app-list') {
+             appListDiv.style.display = 'grid'; // Use grid for app list
+        } /* else if (sectionId === 'app-detail') {
+             // Navigation to new page handles this
+        } */ else if (sectionId === 'info-content') {
+            infoContentDiv.style.display = 'block';
+        }
+         // Scroll to the top of the container when switching sections (except detail which is new page)
+         const container = document.querySelector('.container');
+         if(container) {
+             container.scrollIntoView({ behavior: 'smooth', block: 'start' });
+         }
+    }
+
+     // Function to update the active state in the sidebar menu
+     function updateActiveMenuItem(category) {
+         sidebarMenuItems.forEach(item => item.classList.remove('active'));
+         if (category) { // Only add active class if category is not null/undefined (e.g., during search)
+            const activeItem = document.querySelector(`#sidebar a[data-category="${category}"]`);
+            if (activeItem) {
+                activeItem.classList.add('active');
+            }
+         }
+     }
+
+
+    // --- Mode Toggle Functionality ---
+    function toggleDarkMode() {
+        const isLightMode = body.classList.contains('light-mode');
+        if (isLightMode) {
+            // Switch to Dark Mode
+            body.classList.remove('light-mode');
+            body.classList.add('dark-mode');
+            modeToggleIcon.classList.remove('fa-moon'); // Change icon to sun
+            modeToggleIcon.classList.add('fa-sun');
+            localStorage.setItem('mode', 'dark'); // Save preference
+        } else {
+            // Switch to Light Mode
+            body.classList.remove('dark-mode');
+            body.classList.add('light-mode');
+            modeToggleIcon.classList.remove('fa-sun'); // Change icon to moon
+            modeToggleIcon.classList.add('fa-moon');
+            localStorage.setItem('mode', 'light'); // Save preference
+        }
+    }
+
+     // Apply saved mode on page load
+     function applySavedMode() {
+         const savedMode = localStorage.getItem('mode');
+         if (savedMode === 'light') {
+             body.classList.remove('dark-mode');
+             body.classList.add('light-mode');
+             modeToggleIcon.classList.remove('fa-sun');
+             modeToggleIcon.classList.add('fa-moon');
+         } else {
+             // Default to dark mode if no preference saved or saved is 'dark'
+             body.classList.remove('light-mode');
+             body.classList.add('dark-mode');
+             modeToggleIcon.classList.remove('fa-moon');
+             modeToggleIcon.classList.add('fa-sun');
+         }
+     }
+
+
+    // --- App Rendering and Filtering ---
+
+    // Function to display the list of apps
+    function renderAppsList(appsToDisplay) {
+         appListDiv.innerHTML = ''; // Clear current list
+
+        if (appsToDisplay.length === 0 && allApps.length > 0) { // Show 'No results' only if there are apps fetched but none match filter/search
+             appListDiv.innerHTML = '<p class="info-message">No apps found matching your criteria.</p>';
+             return;
+         } else if (appsToDisplay.length === 0 && allApps.length === 0) { // Show 'No apps yet' if database is empty
+              appListDiv.innerHTML = '<p class="info-message">No apps available yet.</p>';
+              return;
+         }
+
+
+        appsToDisplay.forEach(app => {
+            const appItem = document.createElement('div');
+            appItem.classList.add('app-item');
+            // Store app ID for linking to details page
+            appItem.dataset.id = app.id;
+
+
+            // --- Build the inner HTML for the app item ---
+            let badgesHtml = '';
+            // Example badges based on category or other data
+             if ((app.category || '').toLowerCase() === 'games') { badgesHtml += `<span class="badge mod">MOD</span>`; } // Example MOD badge for Games category
+             // Add 'NEW' badge - could be based on upload date
+             // For demo, let's just add NEW to all for now like the image
+             // if (true) { badgesHtml += `<span class="badge new">NEW</span>`; } // Removed this as it's not based on actual data
+
+
+            if (badgesHtml) { badgesHtml = `<div class="badges">${badgesHtml}</div>`; }
+
+            // Use the img tag wrapped in a div for fixed size and overflow hidden
+            appItem.innerHTML = `
+                 <div class="img-wrapper"> <!-- Wrapper for fixed size and overflow hidden -->
+                     <img src="${app.imageUrl || 'placeholder.png'}" alt="${app.name || 'App Image'}">
+                     ${badgesHtml} <!-- Badges inside wrapper but on top -->
+                 </div>
+                <div class="item-details">
+                    <h3>${app.name || 'Untitled App'}</h3>
+                     <div class="category">${app.category || 'App'}</div>
+                     <div class="version-size">
+                         <span><i class="fas fa-bolt"></i> ${app.version || 'N/A'}</span>
+                         <span><i class="fas fa-download"></i> ${app.size || 'N/A'}</span>
+                     </div>
+                </div>
+                 <!-- Removed download button from list view -->
+                <!-- <button class="item-download-button">Download</button> -->
+            `;
+
+            // Event listener for clicking the entire item to navigate to details page
+            appItem.addEventListener('click', () => {
+                const appId = appItem.dataset.id;
+                if (appId) {
+                    // Navigate to the details page, passing the app ID in the URL
+                    window.location.href = `details.html?id=${appId}`;
+                }
+            });
+
+            appListDiv.appendChild(appItem);
+        });
+    }
+
+
+    // --- Function to fetch apps from Firebase ---
+    async function fetchAndDisplayApps(category = 'All') {
+             showSection('app-list'); // Ensure list view is active
+             appListDiv.innerHTML = '<p class="loading-message">Loading Apps...</p>'; // Loading indicator
+             updateActiveMenuItem(category); // Set the active menu item
+
+
+            try {
+                const appsCol = collection(db, 'apps');
+                const appSnapshot = await getDocs(appsCol);
+                allApps = appSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+
+                // After fetching, apply the initial category filter
+                filterAppsByCategory(category); // This will also call renderAppsList and update menu/sections
+
+
+            } catch (error) {
+                console.error("Error fetching apps: ", error);
+                // Removed specific Firebase error message, kept general one
+                appListDiv.innerHTML = `<p class="error-message">Error loading apps. Please try again later.</p>`;
+            }
+        }
+
+    // --- showAppDetail function is now in details.html ---
+    /*
+    function showAppDetail(appData) {
+       // This logic is moved to details.html
+    }
+    */
+
+
+    // --- Function to filter apps based on search query ---
+    function filterApps(query) {
+        const lowerCaseQuery = query.toLowerCase();
+        // Filter from all apps
+        currentApps = allApps.filter(app => {
+            // Search in name, description, category, version, size
+            // Added check for null/undefined before calling toLowerCase()
+            const nameMatch = (app.name ? app.name.toLowerCase() : '').includes(lowerCaseQuery);
+            const descriptionMatch = (app.description ? app.description.toLowerCase() : '').includes(lowerCaseQuery);
+             const categoryMatch = (app.category ? app.category.toLowerCase() : '').includes(lowerCaseQuery);
+             const versionMatch = (app.version ? app.version.toLowerCase() : '').includes(lowerCaseQuery);
+             const sizeMatch = (app.size ? String(app.size).toLowerCase() : '').includes(lowerCaseQuery); // Convert size to string for search
+
+            return nameMatch || descriptionMatch || categoryMatch || versionMatch || sizeMatch;
+        });
+        renderAppsList(currentApps); // Render the search results
+         showSection('app-list'); // Make sure the list is visible
+         updateActiveMenuItem(null); // Deactivate any active category link when searching
+    }
+
+    // --- Function to filter apps by category ---
+    function filterAppsByCategory(category) {
+         activeCategory = category; // Update the active category state
+         updateActiveMenuItem(category); // Update the UI active state
+         searchInput.value = ''; // Clear search input on category change
+         // searchBarContainer.classList.remove('visible'); // Keep search bar visible as per screenshot
+
+if (category === 'All') {
+             currentApps = allApps; // Show all apps
+             showSection('app-list'); // Show the app list
+         } else if (category === 'Blog' || category === 'FAQ') {
+             // Handle non-app sections - Navigate to separate pages
+             // Make sure these pages exist!
+             if (category === 'Blog') {
+                 window.location.href = 'Blog.html'; // Navigate to Blog.html
+             } else if (category === 'FAQ') {
+                 window.location.href = 'FAQ.html'; // Navigate to FAQ.html
+             }
+             // The rest of the function below this will not execute due to navigation
+             return; // Exit the function after navigating
+         }
+         else {
+             // Filter by specific category
+             currentApps = allApps.filter(app => (app.category || '').toLowerCase() === category.toLowerCase());
+             showSection('app-list'); // Show the app list
+         }
+         renderAppsList(currentApps); // Render the filtered list (will be empty for Blog/FAQ sections if navigation didn't happen)
+    }
+
+
+    // --- Event Listeners ---
+
+    // Back button in info content view (to go back to Home/All Apps)
+    backFromInfoBtn.addEventListener('click', () => {
+         filterAppsByCategory('All'); // Go back to showing all apps (Home)
+         // Scroll to the top
+         const container = document.querySelector('.container');
+         if(container) {
+             container.scrollIntoView({ behavior: 'smooth', block: 'start' });
+         }
+    });
+
+
+    // Event listener for the Search GO button
+    searchGoBtn.addEventListener('click', () => {
+        const query = searchInput.value.trim();
+        if (query) {
+             filterApps(query); // Filter based on query
+         } else {
+             // If search is cleared, reset filter to the current active category
+             filterAppsByCategory(activeCategory); // Pass activeCategory to re-apply filter
+         }
+         // Optional: Hide search bar after search? The image shows it staying open. Let's keep it open.
+    });
+
+    // Event listener for pressing Enter in the search input
+    searchInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+            e.preventDefault(); // Prevent default form submission if input is in a form
+            searchGoBtn.click(); // Simulate button click
+        }
+    });
+
+     // Event listener for clearing search input via input event
+     searchInput.addEventListener('input', () => {
+         // If search input becomes empty, reset to the current category filter
+         if (searchInput.value.trim() === '' && activeCategory !== null) { // Check activeCategory is not null (i.e., not during a search result state)
+             filterAppsByCategory(activeCategory); // Re-apply current category filter
+         } else if (searchInput.value.trim() === '' && activeCategory === null) {
+              // If search is cleared and we were in a search result state, go back to 'All'
+              filterAppsByCategory('All');
+         }
+     });
+
+
+    // Event listener for the Search toggle icon - This icon is not used to toggle the search bar anymore as it's always visible.
+    // Removed the click listener based on the provided screenshot layout.
+    /*
+    searchToggleIcon.addEventListener('click', () => {
+         searchBarContainer.classList.toggle('visible'); // Toggle the 'visible' class
+         if(searchBarContainer.classList.contains('visible')) {
+             searchInput.focus(); // Focus input when shown
+         } else {
+             // Clear search input and re-render based on active category when hiding the bar
+             searchInput.value = '';
+             filterAppsByCategory(activeCategory); // Re-apply current category filter
+         }
+    });
+    */
+
+
+    // Event listener for the Mode toggle icon (Sun/Moon)
+    modeToggleIcon.addEventListener('click', toggleDarkMode);
+
+
+     // Event listeners for Sidebar Toggle
+     menuToggleIcon.addEventListener('click', () => {
+         sidebarOverlay.classList.add('visible');
+         sidebar.classList.add('open');
+     });
+
+     sidebarCloseIcon.addEventListener('click', () => {
+         sidebarOverlay.classList.remove('visible');
+         sidebar.classList.remove('open');
+     });
+
+     sidebarOverlay.addEventListener('click', (event) => {
+         // Only close if the click target is the overlay itself, not the sidebar content
+         if (event.target === sidebarOverlay) {
+             sidebarOverlay.classList.remove('visible');
+             sidebar.classList.remove('open');
+         }
+     });
+
+
+     // Event listeners for Sidebar Menu Items
+     sidebarMenuItems.forEach(item => {
+         item.addEventListener('click', (e) => {
+             e.preventDefault(); // Prevent default link behavior
+             const category = item.dataset.category; // Get the category from data-attribute
+
+             filterAppsByCategory(category); // Filter apps by category OR show info content
+
+             // Close sidebar after clicking a menu item
+             sidebarOverlay.classList.remove('visible');
+             sidebar.classList.remove('open');
+
+             // Scroll to the top of the main content area after menu click - handled by showSection
+
+         });
+     });
+
+
+    // --- Initial Load ---
+     applySavedMode(); // Apply theme first
+     fetchAndDisplayApps('All'); // Fetch all apps and display 'All' category initially
+
+
+</script>
+
+</body>
+</html>

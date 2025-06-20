@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>FAQ - APK Zone</title>
+  <style>
+    :root {
+      --primary: #4361ee;
+      --primary-dark: #3a0ca3;
+      --secondary: #3f37c9;
+      --accent: #4895ef;
+      --dark: #2b2d42;
+      --light: #f8f9fa;
+      --text: #495057;
+      --text-light: #6c757d;
+      --border: #e9ecef;
+    }
+
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+    
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: #f8fafc;
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    #faq {
+      max-width: 800px;
+      width: 90%;
+      margin: 50px auto;
+      padding: 40px;
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+      position: relative;
+      overflow: hidden;
+    }
+
+    #faq::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 5px;
+      background: linear-gradient(90deg, var(--primary), var(--primary-dark));
+    }
+
+    #faq h2 {
+      text-align: center;
+      color: var(--dark);
+      margin-bottom: 30px;
+      font-size: 2.2rem;
+      font-weight: 700;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .faq-item {
+      margin-bottom: 15px;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      border: 1px solid var(--border);
+      transition: all 0.3s ease;
+    }
+
+    .faq-item:hover {
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+      border-color: rgba(67, 97, 238, 0.2);
+    }
+
+    .faq-question {
+      background: white;
+      border: none;
+      width: 100%;
+      text-align: left;
+      padding: 18px 20px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      cursor: pointer;
+      outline: none;
+      color: var(--dark);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: background-color 0.2s;
+    }
+
+    .faq-question:hover {
+      background-color: #f8f9fa;
+    }
+
+    .faq-question::after {
+      content: '+';
+      font-size: 1.5rem;
+      color: var(--primary);
+      transition: transform 0.3s;
+    }
+
+    .faq-question.active::after {
+      content: '-';
+      transform: rotate(0deg);
+    }
+
+    .faq-answer {
+      padding: 0 20px;
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease, padding 0.3s ease;
+      color: var(--text);
+      font-size: 1.05rem;
+      line-height: 1.7;
+    }
+
+    .faq-answer.show {
+      padding: 0 20px 20px;
+      max-height: 500px;
+    }
+
+    .faq-answer a {
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 500;
+      position: relative;
+    }
+
+    .faq-answer a::after {
+      content: '';
+      position: absolute;
+      bottom: -1px;
+      left: 0;
+      width: 0;
+      height: 1px;
+      background: var(--primary);
+      transition: width 0.3s;
+    }
+
+    .faq-answer a:hover::after {
+      width: 100%;
+    }
+
+    @media (max-width: 768px) {
+      #faq {
+        padding: 30px 20px;
+        width: 95%;
+      }
+      
+      #faq h2 {
+        font-size: 1.8rem;
+      }
+      
+      .faq-question {
+        padding: 15px;
+        font-size: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<section id="faq">
+  <h2>❓ Frequently Asked Questions</h2>
+
+  <div class="faq-item">
+    <button class="faq-question">What is APK Zone?<span></span></button>
+    <div class="faq-answer">
+      APK Zone is a trusted platform where you can safely download Android APK files, including popular apps, modded versions, and older versions of applications. We provide direct downloads with no unnecessary redirects or advertisements.
+    </div>
+  </div>
+
+  <div class="faq-item">
+    <button class="faq-question">Is it safe to download APKs from this site?<span></span></button>
+    <div class="faq-answer">
+      Absolutely! Every APK file undergoes rigorous scanning for malware and viruses before being uploaded. We test each file to ensure safety and authenticity. Our team verifies all content to provide you with a secure downloading experience.
+    </div>
+  </div>
+
+  <div class="faq-item">
+    <button class="faq-question">How to request an app?<span></span></button>
+    <div class="faq-answer">
+      You can request apps through multiple channels:
+      <ul style="margin-top: 10px; padding-left: 20px;">
+        <li>Join our <a href="https://t.me/+ds_6Py8WfZ40N2Zl" target="_blank">Telegram channel</a> and make your request</li>
+        <li>Email us at apkzone.support@gmail.com</li>
+        <li>Use the contact form on our website</li>
+      </ul>
+      We prioritize popular requests and try to fulfill them as quickly as possible.
+    </div>
+  </div>
+
+  <div class="faq-item">
+    <button class="faq-question">Do I need an account to download?<span></span></button>
+    <div class="faq-answer">
+      No registration required! APK Zone is completely free to use with no account or sign-up needed. Simply find the app you want and click download - it's that easy! We believe in hassle-free access to apps.
+    </div>
+  </div>
+
+  <div class="faq-item">
+    <button class="faq-question">Can I join the Telegram community?<span></span></button>
+    <div class="faq-answer">
+      Yes! We highly recommend joining our official Telegram channel where we share:
+      <ul style="margin-top: 10px; padding-left: 20px;">
+        <li>New app upload notifications</li>
+        <li>Exclusive early releases</li>
+        <li>Community support</li>
+        <li>Update announcements</li>
+      </ul>
+      Join now: <a href="https://t.me/+ds_6Py8WfZ40N2Zl" target="_blank">APK Zone Telegram Channel</a>
+    </div>
+  </div>
+</section>
+
+<script>
+  const questions = document.querySelectorAll(".faq-question");
+  questions.forEach(q => {
+    q.addEventListener("click", () => {
+      q.classList.toggle("active");
+      const answer = q.nextElementSibling;
+      answer.classList.toggle("show");
+      
+      // Close other open answers
+      questions.forEach(otherQ => {
+        if (otherQ !== q && otherQ.classList.contains("active")) {
+          otherQ.classList.remove("active");
+          otherQ.nextElementSibling.classList.remove("show");
+        }
+      });
+    });
+  });
+</script>
+
+</body>
+</html>

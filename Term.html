@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Terms of Service - APK Zone</title>
+  <style>
+    :root {
+      --primary: #4361ee;
+      --primary-dark: #3a0ca3;
+      --secondary: #3f37c9;
+      --accent: #4895ef;
+      --dark: #2b2d42;
+      --light: #f8f9fa;
+      --text: #495057;
+      --text-light: #6c757d;
+      --border: #e9ecef;
+    }
+
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+    
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: #f8fafc;
+      color: var(--text);
+      line-height: 1.7;
+    }
+
+    .tos-container {
+      max-width: 800px;
+      width: 90%;
+      margin: 50px auto;
+      padding: 40px;
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .tos-container::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 5px;
+      background: linear-gradient(90deg, var(--primary), var(--primary-dark));
+    }
+
+    .tos-container h2 {
+      text-align: center;
+      color: var(--dark);
+      margin-bottom: 30px;
+      font-size: 2.2rem;
+      font-weight: 700;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .tos-container h2::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 25%;
+      width: 50%;
+      height: 3px;
+      background: linear-gradient(90deg, var(--primary), transparent);
+      border-radius: 3px;
+    }
+
+    .tos-container h3 {
+      color: var(--primary-dark);
+      margin: 30px 0 15px;
+      font-size: 1.3rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .tos-container h3::before {
+      content: '•';
+      color: var(--primary);
+      font-size: 1.8rem;
+      line-height: 0;
+    }
+
+    .tos-container p {
+      margin-bottom: 20px;
+      font-size: 1.05rem;
+      color: var(--text);
+      padding-left: 28px;
+    }
+
+    .tos-container strong {
+      color: var(--dark);
+      font-weight: 600;
+    }
+
+    .effective-date {
+      background: rgba(67, 97, 238, 0.1);
+      padding: 15px 20px;
+      border-radius: 8px;
+      margin-top: 30px;
+      border-left: 4px solid var(--primary);
+      font-weight: 500;
+    }
+
+    @media (max-width: 768px) {
+      .tos-container {
+        padding: 30px 20px;
+        width: 95%;
+      }
+      
+      .tos-container h2 {
+        font-size: 1.8rem;
+      }
+      
+      .tos-container p {
+        padding-left: 20px;
+      }
+      
+      .tos-container h3::before {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <section class="tos-container">
+    <h2>📜 Terms of Service</h2>
+
+    <p>Welcome to APK Zone! These terms and conditions outline the rules and regulations for the use of our website.</p>
+
+    <h3>1. Acceptance of Terms</h3>
+    <p>By accessing this website, we assume you accept these terms and conditions. Do not continue to use APK Zone if you do not agree to all of the terms stated on this page.</p>
+
+    <h3>2. Use of Content</h3>
+    <p>All APK files and content provided on this site are for personal use only. Redistribution or commercial use of the content is strictly prohibited.</p>
+
+    <h3>3. No Warranty</h3>
+    <p>We make no warranties or representations about the accuracy or completeness of any content. All downloads are at your own risk.</p>
+
+    <h3>4. External Links</h3>
+    <p>Our site may contain links to third-party websites. We do not control or take responsibility for their content or practices.</p>
+
+    <h3>5. Termination</h3>
+    <p>We reserve the right to terminate or restrict access to users who violate our terms or engage in misuse of the platform.</p>
+
+    <h3>6. Updates to Terms</h3>
+    <p>We may update these Terms of Service at any time. Changes will be reflected on this page with an updated effective date.</p>
+
+    <p>By continuing to use APK Zone, you agree to be bound by the latest version of our Terms of Service.</p>
+
+    <div class="effective-date">
+      <strong>Effective Date:</strong> Jun 20, 2025
+    </div>
+  </section>
+
+</body>
+</html>
