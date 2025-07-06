@@ -255,42 +255,19 @@
             transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease; /* Smooth transition */
             display: flex;
             flex-direction: column;
-            overflow: hidden; /* Clip anything outside border-radius (for rounded corners) */
+            overflow: hidden; /* Clip anything outside border-radius */
         }
         .app-item:hover {
             transform: translateY(-5px);
             box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3);
         }
-
-        /* Style for the image container/wrapper */
-        .app-item .img-wrapper {
-             width: 100%;
-             height: 120px; /* Fixed height for the image area */
-             position: relative; /* Needed for absolute positioned badges */
-             overflow: hidden; /* Important to hide any distortion outside the box */
+        .app-item img {
+            width: 100%;
+            height: 120px; /* Fixed height for image area */
+            object-fit: cover; /* Cover area without distortion */
              border-top-left-radius: 10px;
              border-top-right-radius: 10px;
-             /* Background color is less relevant now as the image will fill */
-             /* background-color: #4a5568; */
         }
-
-        /* Style for the image itself */
-        .app-item .img-wrapper img {
-            display: block; /* Remove extra space below image */
-            width: 100%; /* Make image take full width of wrapper */
-            height: 100%; /* Make image take full height of wrapper */
-
-            /* THIS IS THE KEY PART FOR FILLING THE ENTIRE BOX (ACCEPTING DISTORTION): */
-            object-fit: fill; /* Scales the image to fill the container exactly. THIS MAY DISTORT THE IMAGE'S ASPECT RATIO. */
-            /* object-position: center; */ /* Not needed with object-fit: fill */
-
-             /* Reset default image styling */
-             border: none;
-             padding: 0;
-             margin: 0;
-        }
-
-
         .app-item .item-details {
             padding: 10px;
             flex-grow: 1; /* Allow details to take space */
@@ -329,7 +306,6 @@
              display: flex;
              justify-content: space-between;
              pointer-events: none; /* Allow clicks to pass through */
-             z-index: 10; /* Ensure badges are above the image */
          }
         .badge {
             font-size: 0.7em;
@@ -404,15 +380,7 @@
              box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08);
          }
          .light-mode .app-item:hover { box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1); }
-
-        /* Light mode for the image wrapper and image */
-         .light-mode .app-item .img-wrapper {
-              border: 1px solid #d0d0d0; /* Optional border on wrapper */
-              /* background-color is less relevant for light mode object-fit: fill */
-         }
-          .light-mode .app-item .img-wrapper img {
-              /* No specific changes needed here, styles inherited */
-          }
+         .light-mode .app-item img { border: 1px solid #d0d0d0; }
 
 
          .light-mode .app-item .category { color: #059669; } /* Darker green */
@@ -526,7 +494,10 @@
 <div class="header">
     <div class="left-section">
          <i class="fas fa-bars icon" id="menu-toggle-icon"></i> <!-- Menu Icon -->
+        <div class="title">
+             <div class="logo"><i class="fas fa-robt"></i> APK Zone</div>
 
+        </div>
     </div>
     <div class="right-section">
          <!-- Mode Toggle Icon (Starts as sun, implies dark mode). Updated by JS -->
@@ -723,7 +694,7 @@
         }
          // Scroll to the top of the container when switching sections (except detail which is new page)
          const container = document.querySelector('.container');
-         if(container) {
+         if(container && sectionId !== 'app-detail') {
              container.scrollIntoView({ behavior: 'smooth', block: 'start' });
          }
     }
@@ -806,16 +777,16 @@
              if ((app.category || '').toLowerCase() === 'games') { badgesHtml += `<span class="badge mod">MOD</span>`; } // Example MOD badge for Games category
              // Add 'NEW' badge - could be based on upload date
              // For demo, let's just add NEW to all for now like the image
-             // if (true) { badgesHtml += `<span class="badge new">NEW</span>`; } // Removed this as it's not based on actual data
+             if (true) { badgesHtml += `<span class="badge new">NEW</span>`; }
 
 
             if (badgesHtml) { badgesHtml = `<div class="badges">${badgesHtml}</div>`; }
 
-            // Use the img tag wrapped in a div for fixed size and overflow hidden
+
             appItem.innerHTML = `
-                 <div class="img-wrapper"> <!-- Wrapper for fixed size and overflow hidden -->
+                 <div style="position: relative;"> <!-- Wrapper for badges -->
                      <img src="${app.imageUrl || 'placeholder.png'}" alt="${app.name || 'App Image'}">
-                     ${badgesHtml} <!-- Badges inside wrapper but on top -->
+                     ${badgesHtml}
                  </div>
                 <div class="item-details">
                     <h3>${app.name || 'Untitled App'}</h3>
@@ -861,8 +832,7 @@
 
             } catch (error) {
                 console.error("Error fetching apps: ", error);
-                // Removed specific Firebase error message, kept general one
-                appListDiv.innerHTML = `<p class="error-message">Error loading apps. Please try again later.</p>`;
+                appListDiv.innerHTML = `<p class="error-message">Error loading apps: ${error.message}. Check Firebase Config and Rules.</p>`; // More specific error
             }
         }
 
@@ -880,12 +850,11 @@
         // Filter from all apps
         currentApps = allApps.filter(app => {
             // Search in name, description, category, version, size
-            // Added check for null/undefined before calling toLowerCase()
-            const nameMatch = (app.name ? app.name.toLowerCase() : '').includes(lowerCaseQuery);
-            const descriptionMatch = (app.description ? app.description.toLowerCase() : '').includes(lowerCaseQuery);
-             const categoryMatch = (app.category ? app.category.toLowerCase() : '').includes(lowerCaseQuery);
-             const versionMatch = (app.version ? app.version.toLowerCase() : '').includes(lowerCaseQuery);
-             const sizeMatch = (app.size ? String(app.size).toLowerCase() : '').includes(lowerCaseQuery); // Convert size to string for search
+            const nameMatch = (app.name || '').toLowerCase().includes(lowerCaseQuery);
+            const descriptionMatch = (app.description || '').toLowerCase().includes(lowerCaseQuery);
+             const categoryMatch = (app.category || '').toLowerCase().includes(lowerCaseQuery);
+             const versionMatch = (app.version || '').toLowerCase().includes(lowerCaseQuery);
+             const sizeMatch = (app.size || '').toLowerCase().includes(lowerCaseQuery);
 
             return nameMatch || descriptionMatch || categoryMatch || versionMatch || sizeMatch;
         });
@@ -899,28 +868,26 @@
          activeCategory = category; // Update the active category state
          updateActiveMenuItem(category); // Update the UI active state
          searchInput.value = ''; // Clear search input on category change
-         // searchBarContainer.classList.remove('visible'); // Keep search bar visible as per screenshot
+         searchBarContainer.classList.remove('visible'); // Hide search bar
 
 if (category === 'All') {
              currentApps = allApps; // Show all apps
              showSection('app-list'); // Show the app list
          } else if (category === 'Blog' || category === 'FAQ') {
              // Handle non-app sections - Navigate to separate pages
-             // Make sure these pages exist!
              if (category === 'Blog') {
-                 window.location.href = 'Blog.html'; // Navigate to Blog.html
+                 window.location.href = 'blog.html'; // Navigate to blog.html
              } else if (category === 'FAQ') {
-                 window.location.href = 'FAQ.html'; // Navigate to FAQ.html
+                 window.location.href = 'faq.html'; // Navigate to faq.html
              }
              // The rest of the function below this will not execute due to navigation
-             return; // Exit the function after navigating
          }
          else {
              // Filter by specific category
              currentApps = allApps.filter(app => (app.category || '').toLowerCase() === category.toLowerCase());
              showSection('app-list'); // Show the app list
          }
-         renderAppsList(currentApps); // Render the filtered list (will be empty for Blog/FAQ sections if navigation didn't happen)
+         renderAppsList(currentApps); // Render the filtered list (will be empty for Blog/FAQ sections)
     }
 
 
@@ -944,7 +911,7 @@ if (category === 'All') {
              filterApps(query); // Filter based on query
          } else {
              // If search is cleared, reset filter to the current active category
-             filterAppsByCategory(activeCategory); // Pass activeCategory to re-apply filter
+             filterAppsByCategory(activeCategory);
          }
          // Optional: Hide search bar after search? The image shows it staying open. Let's keep it open.
     });
@@ -960,18 +927,13 @@ if (category === 'All') {
      // Event listener for clearing search input via input event
      searchInput.addEventListener('input', () => {
          // If search input becomes empty, reset to the current category filter
-         if (searchInput.value.trim() === '' && activeCategory !== null) { // Check activeCategory is not null (i.e., not during a search result state)
+         if (searchInput.value.trim() === '') {
              filterAppsByCategory(activeCategory); // Re-apply current category filter
-         } else if (searchInput.value.trim() === '' && activeCategory === null) {
-              // If search is cleared and we were in a search result state, go back to 'All'
-              filterAppsByCategory('All');
          }
      });
 
 
-    // Event listener for the Search toggle icon - This icon is not used to toggle the search bar anymore as it's always visible.
-    // Removed the click listener based on the provided screenshot layout.
-    /*
+    // Event listener for the Search toggle icon
     searchToggleIcon.addEventListener('click', () => {
          searchBarContainer.classList.toggle('visible'); // Toggle the 'visible' class
          if(searchBarContainer.classList.contains('visible')) {
@@ -982,8 +944,6 @@ if (category === 'All') {
              filterAppsByCategory(activeCategory); // Re-apply current category filter
          }
     });
-    */
-
 
     // Event listener for the Mode toggle icon (Sun/Moon)
     modeToggleIcon.addEventListener('click', toggleDarkMode);
@@ -1000,12 +960,9 @@ if (category === 'All') {
          sidebar.classList.remove('open');
      });
 
-     sidebarOverlay.addEventListener('click', (event) => {
-         // Only close if the click target is the overlay itself, not the sidebar content
-         if (event.target === sidebarOverlay) {
-             sidebarOverlay.classList.remove('visible');
-             sidebar.classList.remove('open');
-         }
+     sidebarOverlay.addEventListener('click', () => {
+         sidebarOverlay.classList.remove('visible');
+         sidebar.classList.remove('open');
      });
 
 
@@ -1017,8 +974,7 @@ if (category === 'All') {
 
              filterAppsByCategory(category); // Filter apps by category OR show info content
 
-             // Close sidebar after clicking a menu item
-             sidebarOverlay.classList.remove('visible');
+             sidebarOverlay.classList.remove('visible'); // Close sidebar
              sidebar.classList.remove('open');
 
              // Scroll to the top of the main content area after menu click - handled by showSection
