@@ -1,82 +1,125 @@
 <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>APK Zone App Downloader</title>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
-     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"> <!-- For Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
 
     <style>
         /* --- Base Styles (Dark Mode Default) --- */
-        body {
-            font-family: 'Roboto', sans-serif;
-            margin: 0;
-            background-color: #1a202c; /* Dark background */
-            color: #e2e8f0; /* Light text */
-            padding-top: 60px; /* Space for fixed header */
-            padding-bottom: 20px; /* Space at the bottom */
-            overflow-x: hidden; /* Prevent horizontal scroll when sidebar is out */
-            transition: background-color 0.3s ease, color 0.3s ease; /* Smooth mode transition */
+        :root {
+            --primary-color: #6c5ce7;
+            --primary-dark: #5649c0;
+            --secondary-color: #00cec9;
+            --accent-color: #fd79a8;
+            --success-color: #00b894;
+            --warning-color: #fdcb6e;
+            --danger-color: #d63031;
+            --dark-bg: #1a1a2e;
+            --dark-card: #16213e;
+            --dark-header: #0f3460;
+            --dark-text: #e2e8f0;
+            --dark-text-secondary: #a0aec0;
+            --light-bg: #f8f9fa;
+            --light-card: #ffffff;
+            --light-header: #ffffff;
+            --light-text: #2d3436;
+            --light-text-secondary: #636e72;
+            --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+            --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
+            --shadow-lg: 0 10px 20px rgba(0, 0, 0, 0.1), 0 6px 6px rgba(0, 0, 0, 0.08);
+            --shadow-xl: 0 15px 25px rgba(0, 0, 0, 0.15), 0 5px 10px rgba(0, 0, 0, 0.05);
+            --border-radius: 12px;
+            --border-radius-sm: 8px;
+            --border-radius-lg: 16px;
         }
 
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            background-color: var(--dark-bg);
+            color: var(--dark-text);
+            padding-top: 70px;
+            padding-bottom: 20px;
+            overflow-x: hidden;
+            transition: var(--transition);
+            line-height: 1.6;
+        }
+
+        /* --- Header Styles --- */
         .header {
-            background-color: #2d3748; /* Slightly lighter dark */
-            padding: 10px 20px;
+            background-color: var(--dark-header);
+            padding: 12px 24px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-            position: fixed; /* Keep header at the top */
+            box-shadow: var(--shadow-md);
+            position: fixed;
             top: 0;
             left: 0;
             width: 100%;
-            z-index: 100; /* Stay above content */
-            box-sizing: border-box; /* Include padding in width */
-            transition: background-color 0.3s ease, color 0.3s ease; /* Smooth mode transition */
+            z-index: 1000;
+            transition: var(--transition);
         }
+
         .header .left-section {
             display: flex;
             align-items: center;
+            gap: 15px;
         }
+
         .header .logo {
-            font-size: 1.5em; /* Adjusted font size for header */
-            margin-right: 10px;
-            color: #667eea; /* Example accent color */
-            font-weight: 700;
-        }
-         .header .logo i { /* Style for Font Awesome Robot */
-             color: #667eea;
-             margin-right: 100px;
-         }
-        .header .title {
             display: flex;
-            flex-direction: column;
-        }
-        .header .title h1 {
-            font-size: 1em; /* Adjusted font size */
-            margin: 0;
-            color: inherit; /* Inherit color from header */
+            align-items: center;
+            gap: 10px;
+            font-size: 1.4rem;
             font-weight: 700;
+            color: var(--primary-color);
+            text-decoration: none;
+            transition: var(--transition);
         }
-         .header .title p {
-             font-size: 0.7em; /* Adjusted font size */
-             margin: 0;
-             color: #a0aec0; /* Keep a softer color */
-         }
+
+        .header .logo i {
+            font-size: 1.6rem;
+            color: var(--primary-color);
+        }
+
+        .header .logo:hover {
+            color: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
         .header .right-section {
             display: flex;
             align-items: center;
+            gap: 20px;
         }
-        .header .icon {
-            font-size: 1.3em;
-            margin-left: 15px;
-            cursor: pointer;
-            color: #a0aec0;
-            transition: color 0.2s ease;
-        }
-         .header .icon:hover { color: #e2e8f0; }
 
+        .header .icon {
+            font-size: 1.4rem;
+            color: var(--dark-text-secondary);
+            cursor: pointer;
+            transition: var(--transition);
+            padding: 5px;
+            border-radius: 50%;
+        }
+
+        .header .icon:hover {
+            color: var(--dark-text);
+            background-color: rgba(255, 255, 255, 0.1);
+            transform: scale(1.1);
+        }
 
         /* --- Sidebar Styles --- */
         #sidebar-overlay {
@@ -85,11 +128,12 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.7); /* Semi-transparent overlay */
-            z-index: 150; /* Above content, below sidebar */
-            display: none; /* Hidden by default */
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 1500;
+            display: none;
             opacity: 0;
             transition: opacity 0.3s ease;
+            backdrop-filter: blur(5px);
         }
 
         #sidebar-overlay.visible {
@@ -100,31 +144,38 @@
         #sidebar {
             position: fixed;
             top: 0;
-            left: -280px; /* Start off-screen */
-            width: 280px; /* Sidebar width */
+            left: -320px;
+            width: 300px;
             height: 100%;
-            background-color: #2d3748; /* Dark background */
-            z-index: 200; /* Above overlay and content */
-            transition: left 0.3s ease, background-color 0.3s ease; /* Smooth transition */
-            padding-top: 70px; /* Space from the top (header) */
-            box-sizing: border-box;
-            overflow-y: auto; /* Add scroll if content overflows */
+            background-color: var(--dark-header);
+            z-index: 2000;
+            transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+            padding-top: 80px;
+            box-shadow: var(--shadow-xl);
+            overflow-y: auto;
         }
 
         #sidebar.open {
-            left: 0; /* Slide in */
+            left: 0;
         }
 
         #sidebar-close-icon {
             position: absolute;
-            top: 15px;
-            right: 15px;
-            font-size: 1.5em;
-            color: #a0aec0;
+            top: 20px;
+            right: 20px;
+            font-size: 1.5rem;
+            color: var(--dark-text-secondary);
             cursor: pointer;
-            transition: color 0.2s ease;
+            transition: var(--transition);
+            padding: 5px;
+            border-radius: 50%;
         }
-        #sidebar-close-icon:hover { color: #e2e8f0; }
+
+        #sidebar-close-icon:hover {
+            color: var(--dark-text);
+            background-color: rgba(255, 255, 255, 0.1);
+            transform: rotate(90deg);
+        }
 
         #sidebar ul {
             list-style: none;
@@ -134,468 +185,709 @@
 
         #sidebar li {
             margin-bottom: 5px;
+            padding: 0 15px;
         }
 
         #sidebar a {
             display: flex;
             align-items: center;
-            padding: 12px 20px;
-            color: #e2e8f0;
+            padding: 15px 20px;
+            color: var(--dark-text);
             text-decoration: none;
-            font-size: 1.1em;
-            transition: background-color 0.2s ease, color 0.2s ease;
+            font-size: 1.1rem;
+            font-weight: 500;
+            border-radius: var(--border-radius-sm);
+            transition: var(--transition);
         }
 
         #sidebar a:hover,
-         #sidebar a.active { /* Active state style */
-            background-color: #4a5568; /* Darker background on hover/active */
-            color: #fff;
+        #sidebar a.active {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: white;
+            transform: translateX(5px);
         }
 
-
         #sidebar a .icon-circle {
-            width: 35px;
-            height: 35px;
+            width: 40px;
+            height: 40px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             margin-right: 15px;
-            font-size: 1em;
-            color: white; /* Icon color inside circle */
-             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Subtle shadow */
+            font-size: 1.1rem;
+            color: white;
+            box-shadow: var(--shadow-sm);
+            transition: var(--transition);
         }
 
-        /* Specific icon circle colors from the image */
-        #sidebar a[data-category="All"] .icon-circle { background-color: #667eea; } /* Home Blue */
-        #sidebar a[data-category="Games"] .icon-circle { background-color: #fc8181; } /* Games Red */
-        #sidebar a[data-category="Apps"] .icon-circle { background-color: #9f7aea; } /* Apps Purple */
-        #sidebar a[data-category="Blog"] .icon-circle { background-color: #f6ad55; } /* Blog Orange */
-        #sidebar a[data-category="FAQ"] .icon-circle { background-color: #48bb78; } /* FAQ Green */
+        #sidebar a:hover .icon-circle {
+            transform: scale(1.1);
+        }
 
+        /* Specific icon circle colors */
+        #sidebar a[data-category="All"] .icon-circle { background-color: var(--primary-color); }
+        #sidebar a[data-category="Games"] .icon-circle { background-color: var(--accent-color); }
+        #sidebar a[data-category="Apps"] .icon-circle { background-color: var(--secondary-color); }
+        #sidebar a[data-category="Blog"] .icon-circle { background-color: var(--warning-color); color: var(--light-text); }
+        #sidebar a[data-category="FAQ"] .icon-circle { background-color: var(--success-color); }
 
-        /* --- Main Content Styles --- */
+        /* --- Search Section --- */
         .search-section {
             text-align: center;
-            padding: 40px 20px;
-            background-color: inherit; /* Inherit from body */
-            transition: background-color 0.3s ease;
+            padding: 50px 20px 40px;
+            background-color: inherit;
+            transition: var(--transition);
         }
+
         .search-section h2 {
-            font-size: 2em;
-            margin-bottom: 10px;
-            color: inherit; /* Inherit from body */
+            font-size: 2.2rem;
+            margin-bottom: 15px;
+            color: inherit;
             font-weight: 700;
+            background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: fadeInDown 0.8s both;
         }
+
         .search-section p {
-            font-size: 1.1em;
-            color: #a0aec0; /* Keep a softer color */
-            margin-bottom: 25px;
+            font-size: 1.1rem;
+            color: var(--dark-text-secondary);
+            margin-bottom: 30px;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+            animation: fadeIn 1s both 0.3s;
         }
+
         .search-input-container {
-             display: flex; /* Keep flex display as per original request */
-             max-width: 500px;
-             margin: 0 auto;
-             background-color: #2d3748; /* Lighter dark */
-             border-radius: 30px; /* Pill shape */
-             overflow: hidden;
-             padding: 5px;
-             align-items: center;
-             transition: background-color 0.3s ease;
-         }
-         /* Remove .visible toggle as search bar should always be visible based on images */
-         /* #search-input-container.visible { display: flex; } */
+            display: flex;
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: var(--dark-card);
+            border-radius: 50px;
+            overflow: hidden;
+            padding: 5px;
+            align-items: center;
+            transition: var(--transition);
+            box-shadow: var(--shadow-md);
+            animation: fadeInUp 0.8s both 0.5s;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .search-input-container:focus-within {
+            box-shadow: 0 0 0 3px rgba(108, 92, 231, 0.3);
+            transform: translateY(-3px);
+        }
 
         .search-input-container .search-icon {
-            padding: 10px 15px;
-            color: #a0aec0; /* Keep a softer color */
-            font-size: 1.1em;
+            padding: 12px 20px;
+            color: var(--dark-text-secondary);
+            font-size: 1.2rem;
         }
+
         .search-input-container input[type="text"] {
             flex-grow: 1;
-            padding: 10px 0;
+            padding: 12px 0;
             border: none;
             outline: none;
             background: none;
-            color: inherit; /* Inherit from container */
-            font-size: 1em;
+            color: inherit;
+            font-size: 1rem;
+            font-family: 'Poppins', sans-serif;
         }
-         .search-input-container input::placeholder { color: #a0aec0; opacity: 0.7; } /* Placeholder style */
+
+        .search-input-container input::placeholder {
+            color: var(--dark-text-secondary);
+            opacity: 0.7;
+        }
 
         .search-input-container button {
-            background-color: #48bb78; /* Green */
+            background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
             color: white;
             border: none;
-            padding: 10px 25px;
-            border-radius: 25px;
+            padding: 12px 30px;
+            border-radius: 50px;
             cursor: pointer;
-            font-size: 1em;
-            transition: background-color 0.3s ease;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: var(--transition);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            box-shadow: var(--shadow-sm);
         }
-        .search-input-container button:hover { background-color: #38a169; /* Darker Green */ }
 
+        .search-input-container button:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+            background: linear-gradient(to right, var(--primary-dark), var(--secondary-color));
+        }
 
-        /* App List View */
+        /* --- App List View --- */
         .container {
-            max-width: 900px;
+            max-width: 1200px;
             margin: auto;
-            padding: 0 20px; /* Add horizontal padding */
+            padding: 0 20px;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            margin: 30px 0 20px;
+            color: inherit;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-title i {
+            color: var(--primary-color);
         }
 
         #app-list {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); /* Adjust based on preference */
-            gap: 20px;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 25px;
             margin-top: 20px;
         }
+
         .app-item {
-            background-color: #2d3748; /* Card background */
-            border-radius: 10px;
+            background-color: var(--dark-card);
+            border-radius: var(--border-radius);
             cursor: pointer;
-            transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease; /* Smooth transition */
+            transition: var(--transition);
             display: flex;
             flex-direction: column;
-            overflow: hidden; /* Clip anything outside border-radius */
+            overflow: hidden;
+            position: relative;
+            box-shadow: var(--shadow-sm);
         }
+
         .app-item:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3);
+            transform: translateY(-10px);
+            box-shadow: var(--shadow-lg);
         }
+
+        .app-item .app-image-container {
+            position: relative;
+            width: 100%;
+            height: 150px;
+            overflow: hidden;
+        }
+
         .app-item img {
             width: 100%;
-            height: 120px; /* Fixed height for image area */
-            object-fit: cover; /* Cover area without distortion */
-             border-top-left-radius: 10px;
-             border-top-right-radius: 10px;
+            height: 100%;
+            object-fit: cover;
+            transition: var(--transition);
         }
+
+        .app-item:hover img {
+            transform: scale(1.05);
+        }
+
         .app-item .item-details {
-            padding: 10px;
-            flex-grow: 1; /* Allow details to take space */
+            padding: 15px;
+            flex-grow: 1;
             display: flex;
             flex-direction: column;
         }
+
         .app-item h3 {
-            font-size: 1em;
-            margin: 0 0 5px 0;
-            color: inherit; /* Inherit from item */
-            font-weight: 500;
+            font-size: 1.1rem;
+            margin: 0 0 8px 0;
+            color: inherit;
+            font-weight: 600;
             overflow: hidden;
             text-overflow: ellipsis;
-            white-space: nowrap; /* Prevent wrapping */
+            white-space: nowrap;
         }
-         .app-item .category {
-             font-size: 0.8em;
-             color: #48bb78; /* Green - specific color */
-             margin-bottom: 8px;
-         }
-         .app-item .version-size {
-             font-size: 0.7em;
-             color: #a0aec0; /* Softer color */
-             margin-top: auto; /* Push to bottom */
-             display: flex;
-             justify-content: space-between;
-         }
-         .app-item .version-size span i { margin-right: 3px; }
 
-        /* Badges (Optional - requires data) */
-         .badges {
-             position: absolute;
-             top: 5px;
-             left: 5px;
-             right: 5px;
-             display: flex;
-             justify-content: space-between;
-             pointer-events: none; /* Allow clicks to pass through */
-         }
+        .app-item .category {
+            font-size: 0.85rem;
+            color: var(--secondary-color);
+            margin-bottom: 10px;
+            font-weight: 500;
+        }
+
+        .app-item .version-size {
+            font-size: 0.8rem;
+            color: var(--dark-text-secondary);
+            margin-top: auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .app-item .version-size span {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .app-item .version-size i {
+            font-size: 0.9rem;
+        }
+
+        /* Badges */
+        .badges {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            right: 10px;
+            display: flex;
+            justify-content: space-between;
+            pointer-events: none;
+            z-index: 10;
+        }
+
         .badge {
-            font-size: 0.7em;
-            padding: 3px 8px;
-            border-radius: 12px;
-            font-weight: bold;
+            font-size: 0.7rem;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-weight: 600;
             color: white;
-            margin-left: 5px;
-             box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+            box-shadow: var(--shadow-sm);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
-        .badge.new { background-color: #63b3ed; } /* Blue */
-        .badge.mod { background-color: #fc8181; } /* Red */
 
+        .badge.new {
+            background-color: var(--primary-color);
+        }
 
-        /* App Detail View - This section is now unused in user.html but kept for context */
-        /* #app-detail { ... } */
+        .badge.mod {
+            background-color: var(--danger-color);
+        }
 
+        .badge.popular {
+            background-color: var(--warning-color);
+            color: var(--light-text);
+        }
+
+        /* Rating Stars */
+        .rating {
+            display: flex;
+            align-items: center;
+            gap: 3px;
+            margin-top: 5px;
+        }
+
+        .rating i {
+            font-size: 0.8rem;
+            color: var(--warning-color);
+        }
+
+        .rating-count {
+            font-size: 0.7rem;
+            color: var(--dark-text-secondary);
+            margin-left: 5px;
+        }
+
+        /* Loading and Messages */
         .loading-message, .error-message, .info-message {
             text-align: center;
-            margin-top: 20px;
-            font-size: 1.1em;
-            color: #a0aec0; /* Softer color */
+            margin: 40px 0;
+            font-size: 1.1rem;
+            color: var(--dark-text-secondary);
+            padding: 20px;
+            border-radius: var(--border-radius);
+            background-color: rgba(255, 255, 255, 0.05);
         }
-        .error-message { color: #fc8181; } /* Red */
-        .info-message { font-style: italic; }
 
+        .error-message {
+            color: var(--danger-color);
+            background-color: rgba(214, 48, 49, 0.1);
+        }
 
-         /* --- Light Mode Styles --- */
-         body.light-mode {
-             background-color: #eef2f7; /* Light background */
-             color: #333; /* Dark text */
-         }
+        .info-message {
+            font-style: italic;
+        }
 
-         .light-mode .header {
-             background-color: #ffffff; /* White header */
-             color: #333;
-             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-         }
+        /* --- Light Mode Styles --- */
+        body.light-mode {
+            background-color: var(--light-bg);
+            color: var(--light-text);
+        }
 
-         .light-mode .header .title p { color: #555; } /* Darker soft color */
-         .light-mode .header .icon { color: #555; }
-         .light-mode .header .icon:hover { color: #333; }
+        .light-mode .header {
+            background-color: var(--light-header);
+            color: var(--light-text);
+            box-shadow: var(--shadow-sm);
+        }
 
+        .light-mode .header .icon {
+            color: var(--light-text-secondary);
+        }
 
-         .light-mode #sidebar {
-             background-color: #ffffff; /* White sidebar */
-             color: #333;
-         }
-         .light-mode #sidebar-close-icon { color: #555; }
-         .light-mode #sidebar-close-icon:hover { color: #333; }
+        .light-mode .header .icon:hover {
+            color: var(--light-text);
+            background-color: rgba(0, 0, 0, 0.05);
+        }
 
-         .light-mode #sidebar a { color: #333; }
-         .light-mode #sidebar a:hover,
-         .light-mode #sidebar a.active {
-             background-color: #e2e8f0; /* Light background hover */
-             color: #1a202c; /* Dark text hover */
-         }
+        .light-mode #sidebar {
+            background-color: var(--light-header);
+            color: var(--light-text);
+        }
 
-         .light-mode .search-section h2,
-         .light-mode .search-section p { color: #333; } /* Dark text */
+        .light-mode #sidebar-close-icon {
+            color: var(--light-text-secondary);
+        }
 
-         .light-mode .search-input-container { background-color: #e2e8f0; } /* Lighter light */
-         .light-mode .search-input-container .search-icon { color: #777; }
-         .light-mode .search-input-container input[type="text"] { color: #333; }
-         .light-mode .search-input-container input::placeholder { color: #777; opacity: 0.9; }
+        .light-mode #sidebar-close-icon:hover {
+            color: var(--light-text);
+            background-color: rgba(0, 0, 0, 0.05);
+        }
 
+        .light-mode #sidebar a {
+            color: var(--light-text);
+        }
 
-         .light-mode .app-item {
-             background-color: #ffffff; /* White card */
-             color: #333;
-             border: 1px solid #e0e0e0;
-             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08);
-         }
-         .light-mode .app-item:hover { box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1); }
-         .light-mode .app-item img { border: 1px solid #d0d0d0; }
+        .light-mode #sidebar a:hover,
+        .light-mode #sidebar a.active {
+            background-color: rgba(0, 0, 0, 0.05);
+            color: var(--light-text);
+        }
 
+        .light-mode .search-section p {
+            color: var(--light-text-secondary);
+        }
 
-         .light-mode .app-item .category { color: #059669; } /* Darker green */
-         .light-mode .app-item .version-size { color: #555; }
+        .light-mode .search-input-container {
+            background-color: var(--light-card);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+        }
 
+        .light-mode .search-input-container input::placeholder {
+            color: var(--light-text-secondary);
+        }
 
-         /* App Detail View - Styles for details.html copied here for consistency */
-         /* Note: These styles target elements *within* .details-container in details.html */
-         .light-mode .details-container { /* Use a class for the main content container */
-             background-color: #ffffff; /* White background */
-             color: #333;
-             border: 1px solid #e0e0e0;
-             box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
-         }
+        .light-mode .app-item {
+            background-color: var(--light-card);
+            color: var(--light-text);
+            box-shadow: var(--shadow-sm);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
 
-         .light-mode .details-section-title {
-             color: #333; /* Dark color for titles */
-             border-bottom-color: #ccc; /* Lighter separator */
-         }
+        .light-mode .app-item:hover {
+            box-shadow: var(--shadow-lg);
+        }
 
-         .light-mode .details-container h2 { color: inherit; } /* Inherit color from container */
+        .light-mode .app-item .category {
+            color: var(--success-color);
+        }
 
-         .light-mode .details-container img {
-              border: 1px solid #d0d0d0;
-              box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-         }
+        .light-mode .app-item .version-size {
+            color: var(--light-text-secondary);
+        }
 
-         .light-mode .detail-item {
-             background-color: #e2e8f0; /* Light background for items */
-         }
-         .light-mode .detail-item i { color: #059669; } /* Darker green icon color */
-         .light-mode .detail-item .text .label { color: #555; } /* Darker soft color */
-         .light-mode .detail-item .text .value { color: #333; } /* Dark text */
+        .light-mode .loading-message,
+        .light-mode .info-message {
+            color: var(--light-text-secondary);
+            background-color: rgba(0, 0, 0, 0.03);
+        }
 
+        .light-mode .error-message {
+            color: var(--danger-color);
+            background-color: rgba(214, 48, 49, 0.1);
+        }
 
-         .light-mode .user-rating-container .stars { color: #f59e0b; } /* Darker yellow stars */
-          .light-mode .user-rating-container .stars .filled { color: #f59e0b; }
-         .light-mode .user-rating-container .stars .fa-star { color: #ccc; } /* Lighter empty star color */
-         .light-mode .user-rating-container .rating-count { color: #555; }
-
-         .light-mode #detail-download-btn { background-color: #059669; } /* Darker green */
-         .light-mode #detail-download-btn:hover { background-color: #047857; }
-
-
-         .light-mode .features-list li {
-             background-color: #e2e8f0; /* Light background for items */
-             color: #555;
-         }
-         .light-mode .features-list li i { color: #d97706; } /* Darker yellow checkmark */
-
-         .light-mode .about-content {
-             background-color: #e2e8f0; /* Light background for content */
-             color: #555;
-         }
-
-          .light-mode .bottom-buttons .back-btn {
-              background-color: #9ca3af; /* Darker gray */
-              color: white;
-          }
-          .light-mode .bottom-buttons .back-btn:hover { background-color: #6b7280; }
-
-
-         .light-mode .loading-message,
-         .light-mode .error-message,
-         .light-mode .info-message { color: #555; }
-         .light-mode .error-message { color: #dc2626; } /* Red */
+        /* --- Footer --- */
         .footer {
-
-            padding: 30px 0;
-            font-family: Arial, sans-serif;
+            padding: 50px 0 30px;
+            font-family: 'Poppins', sans-serif;
             text-align: center;
-            border-top: 1px solid #eee;
+            margin-top: 60px;
+            background-color: var(--dark-header);
+            transition: var(--transition);
         }
+
+        .light-mode .footer {
+            background-color: #f1f3f5;
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
         .social-icons {
+            margin-bottom: 25px;
+            display: flex;
+            justify-content: center;
+            gap: 25px;
+        }
+
+        .social-icon {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: rgba(255, 255, 255, 0.1);
+            transition: var(--transition);
+        }
+
+        .light-mode .social-icon {
+            background-color: rgba(0, 0, 0, 0.05);
+        }
+
+        .social-icon:hover {
+            transform: translateY(-5px) scale(1.1);
+            box-shadow: var(--shadow-md);
+        }
+
+        .social-icon svg {
+            width: 22px;
+            height: 22px;
+            transition: var(--transition);
+        }
+
+        .copyright {
+            margin-bottom: 20px;
+            color: var(--dark-text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .light-mode .copyright {
+            color: var(--light-text-secondary);
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 15px;
             margin-bottom: 20px;
         }
-        .social-icon {
-            margin: 0 15px;
-            display: inline-block;
-        }
-        .copyright {
-            margin-bottom: 15px;
-            color: #666;
-            font-size: 14px;
-        }
+
         .footer-links a {
-            color: #555;
+            color: var(--dark-text-secondary);
             text-decoration: none;
-            margin: 0 12px;
-            font-size: 13px;
-            transition: color 0.3s;
+            font-size: 0.85rem;
+            font-weight: 500;
+            transition: var(--transition);
+            padding: 5px 10px;
+            border-radius: var(--border-radius-sm);
         }
+
+        .light-mode .footer-links a {
+            color: var(--light-text-secondary);
+        }
+
         .footer-links a:hover {
-            color: #000;
-        }
-        .social-icon svg {
-            width: 24px;
-            height: 24px;
-            transition: transform 0.3s;
-        }
-        .social-icon:hover svg {
-            transform: scale(1.2);
+            color: var(--dark-text);
+            background-color: rgba(255, 255, 255, 0.1);
         }
 
+        .light-mode .footer-links a:hover {
+            color: var(--light-text);
+            background-color: rgba(0, 0, 0, 0.05);
+        }
 
+        /* --- Animations --- */
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+
+        .floating {
+            animation: float 3s ease-in-out infinite;
+        }
+
+        /* --- Responsive Design --- */
+        @media (max-width: 768px) {
+            .header {
+                padding: 10px 15px;
+            }
+
+            .header .logo {
+                font-size: 1.2rem;
+            }
+
+            .header .icon {
+                font-size: 1.2rem;
+            }
+
+            .search-section {
+                padding: 40px 15px 30px;
+            }
+
+            .search-section h2 {
+                font-size: 1.8rem;
+            }
+
+            .search-section p {
+                font-size: 1rem;
+            }
+
+            .search-input-container {
+                max-width: 100%;
+            }
+
+            #app-list {
+                grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+                gap: 15px;
+            }
+
+            .app-item .app-image-container {
+                height: 130px;
+            }
+
+            .footer-links {
+                gap: 10px;
+            }
+
+            .social-icons {
+                gap: 15px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            #app-list {
+                grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+                gap: 12px;
+            }
+
+            .app-item .app-image-container {
+                height: 110px;
+            }
+
+            .app-item h3 {
+                font-size: 1rem;
+            }
+
+            .footer-links {
+                flex-direction: column;
+                align-items: center;
+                gap: 8px;
+            }
+        }
+
+        /* --- Scrollbar Styles --- */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary-color);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--primary-dark);
+        }
     </style>
-
 </head>
-<body class="dark-mode"> <!-- Default to dark mode. Class will be updated by JS -->
+<body class="dark-mode">
 
 <div class="header">
     <div class="left-section">
-         <i class="fas fa-bars icon" id="menu-toggle-icon"></i> <!-- Menu Icon -->
-        <div class="title">
-             <div class="logo"><i class="fas fa-robt"></i> APK Zone</div>
-
-        </div>
+        <i class="fas fa-bars icon" id="menu-toggle-icon"></i>
+        <a href="#" class="logo">
+            <i class="fas fa-robot floating"></i>
+            <span>APK Zone</span>
+        </a>
     </div>
     <div class="right-section">
-         <!-- Mode Toggle Icon (Starts as sun, implies dark mode). Updated by JS -->
-         <i class="fas fa-sun icon" id="mode-toggle-icon"></i>
-        <i class="fas fa-search icon" id="search-toggle-icon"></i> <!-- Search Icon -->
+        <i class="fas fa-sun icon" id="mode-toggle-icon"></i>
+        <i class="fas fa-search icon" id="search-toggle-icon"></i>
     </div>
 </div>
 
-<!-- --- Sidebar Menu --- -->
+<!-- Sidebar Menu -->
 <div id="sidebar-overlay"></div>
 <div id="sidebar">
     <i class="fas fa-times" id="sidebar-close-icon"></i>
     <ul>
         <li>
             <a href="#" data-category="All">
-                <span class="icon-circle"><i class="fas fa-home"></i></span> Home
+                <span class="icon-circle"><i class="fas fa-home"></i></span> 
+                <span>Home</span>
             </a>
         </li>
         <li>
             <a href="#" data-category="Games">
-                 <span class="icon-circle"><i class="fas fa-gamepad"></i></span> Games
+                <span class="icon-circle"><i class="fas fa-gamepad"></i></span> 
+                <span>Games</span>
             </a>
         </li>
         <li>
             <a href="#" data-category="Apps">
-                 <span class="icon-circle"><i class="fas fa-mobile-alt"></i></span> Apps
+                <span class="icon-circle"><i class="fas fa-mobile-alt"></i></span> 
+                <span>Apps</span>
             </a>
         </li>
-         <li>
+        <li>
             <a href="Blog.html" data-category="Blog">
-                 <span class="icon-circle"><i class="fas fa-book-open"></i></span> Blog
+                <span class="icon-circle"><i class="fas fa-book-open"></i></span> 
+                <span>Blog</span>
             </a>
         </li>
-         <li>
+        <li>
             <a href="#" data-category="FAQ">
-                 <span class="icon-circle"><i class="fas fa-question"></i></span> FAQ
+                <span class="icon-circle"><i class="fas fa-question-circle"></i></span> 
+                <span>FAQ</span>
             </a>
         </li>
-        <!-- Add more categories as needed -->
     </ul>
 </div>
 
-
 <div class="search-section">
-    <h2>Search here</h2>
-    <p>Search here your favourite games or applications to download it instantly.</p>
-     <!-- Search input container - Toggled visibility -->
-     <div class="search-input-container" id="search-bar-container">
-         <span class="search-icon"><i class="fas fa-search"></i></span>
-         <input type="text" id="search-input" placeholder="Type here...">
-         <button id="search-go-btn">GO</button>
-     </div>
+    <h2>Discover Amazing Apps & Games</h2>
+    <p>Find and download your favorite apps and games instantly. All files are safe and verified.</p>
+    <div class="search-input-container" id="search-bar-container">
+        <span class="search-icon"><i class="fas fa-search"></i></span>
+        <input type="text" id="search-input" placeholder="Search for apps or games...">
+        <button id="search-go-btn">Search</button>
+    </div>
 </div>
 
-
 <div class="container">
+    <h2 class="section-title">
+        <i class="fas fa-fire"></i>
+        <span id="section-title-text">Popular Downloads</span>
+    </h2>
 
     <div id="app-list">
-        <p class="loading-message">Loading Apps...</p>
-        <!-- Apps will be loaded here by JavaScript -->
+        <p class="loading-message animate__animated animate__fadeIn">
+            <i class="fas fa-spinner fa-spin"></i> Loading Apps...
+        </p>
     </div>
 
-     <!-- App Detail View - This section is now in details.html -->
-     <!-- The div below is kept but will always be display: none -->
-     <div id="app-detail" style="display: none;">
-         <!-- Content will be loaded in details.html -->
-     </div>
-
-    <!-- Placeholder for Blog/FAQ or other non-app content -->
     <div id="info-content" class="info-message" style="display: none;">
         <h2 id="info-title"></h2>
         <p id="info-description"></p>
-         <button id="back-from-info-btn" class="back-btn" style="margin-top: 20px;">Back to Home</button>
+        <button id="back-from-info-btn" class="back-btn" style="margin-top: 20px;">
+            <i class="fas fa-arrow-left"></i> Back to Home
+        </button>
     </div>
-
-
 </div>
-    <!-- --- Footer --- -->
+
 <footer class="footer">
     <div class="social-icons">
-        <a href="https://www.instagram.com/apkz.one?igsh=YzBuaGVzaDRub3Ux" class="social-icon">
+        <a href="https://www.instagram.com/apkz.one?igsh=YzBuaGVzaDRub3Ux" class="social-icon" target="_blank">
             <svg viewBox="0 0 24 24" style="fill:#e1306c">
                 <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
             </svg>
         </a>
-        <a href="https://youtube.com/@fullh.dmovie?si=edWEDi8PCx-Zj_sv" class="social-icon">
+        <a href="https://youtube.com/@fullh.dmovie?si=edWEDi8PCx-Zj_sv" class="social-icon" target="_blank">
             <svg viewBox="0 0 24 24" style="fill:#ff0000">
                 <path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"/>
             </svg>
         </a>
-        <a href="https://t.me/+mu8H74OWEV43OTNl" class="social-icon">
+        <a href="https://t.me/+mu8H74OWEV43OTNl" class="social-icon" target="_blank">
             <svg viewBox="0 0 24 24" style="fill:#0088cc">
                 <path d="M9.417 15.181l-.397 5.584c.568 0 .814-.244 1.109-.537l2.663-2.545 5.518 4.041c1.012.564 1.725.267 1.998-.931l3.622-16.972.001-.001c.321-1.496-.541-2.081-1.527-1.714l-21.29 8.151c-1.453.564-1.431 1.374-.247 1.741l5.443 1.693 12.643-7.911c.595-.394 1.136-.176.691.218z"/>
             </svg>
         </a>
     </div>
     <div class="copyright">
-        © 2025 YourCompany. All Rights Reserved.
+        © 2025 APK Zone. All Rights Reserved.
     </div>
     <div class="footer-links">
         <a href="Privacy.html">Privacy Policy</a>
@@ -604,59 +896,41 @@
         <a href="Term.html">Terms of Service</a>
     </div>
 </footer>
-<!-- Load Firebase config and services -->
-<script type="module">
-    // Firebase SDKs ko import karein
-    import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js';
-    import { getFirestore, collection, getDocs } from 'https://www.gstatic.com/firebasejs/9.0.0/firebase-firestore.js';
 
-    // आपकी Google Firebase project configuration
+<script type="module">
+    // Firebase SDKs
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js';
+    import { getFirestore, collection, getDocs, query, orderBy, limit } from 'https://www.gstatic.com/firebasejs/9.0.0/firebase-firestore.js';
+
+    // Firebase configuration
     const firebaseConfig = {
-      apiKey: "AIzaSyDXyZojvzlB7XQXOFw6n_kWK07mvtzVzYY", // <-- Your API Key
-      authDomain: "apps-1945d.firebaseapp.com", // <-- Your Auth Domain
-      projectId: "apps-1945d",   // <-- Your Project ID
-      storageBucket: "apps-1945d.firebasestorage.app", // <-- Your Storage Bucket (optional)
-      messagingSenderId: "922330585425", // <-- Your Messaging Sender ID (optional)
-      appId: "1:922330585425:web:455c102287f072a78f1b70"             // <-- Your App ID
-      // measurementId: "YOUR_MEASUREMENT_ID" // <-- Uncomment if using Analytics
+        apiKey: "AIzaSyDXyZojvzlB7XQXOFw6n_kWK07mvtzVzYY",
+        authDomain: "apps-1945d.firebaseapp.com",
+        projectId: "apps-1945d",
+        storageBucket: "apps-1945d.firebasestorage.app",
+        messagingSenderId: "922330585425",
+        appId: "1:922330585425:web:455c102287f072a78f1b70"
     };
 
-    // Firebase को initialize करें
+    // Initialize Firebase
     const app = initializeApp(firebaseConfig);
-
-    // Firestore service का instance प्राप्त करें
     const db = getFirestore(app);
 
-
-    // --- DOM Elements ---
-    const body = document.body; // Reference to the body for mode toggle
+    // DOM Elements
+    const body = document.body;
     const appListDiv = document.getElementById('app-list');
-    // const appDetailDiv = document.getElementById('app-detail'); // Removed as it's in details.html
-     const infoContentDiv = document.getElementById('info-content'); // New info content div
-     const infoTitle = document.getElementById('info-title'); // Title in info content
-     const infoDescription = document.getElementById('info-description'); // Description in info content
-     const backFromInfoBtn = document.getElementById('back-from-info-btn'); // Button in info content
-
-
-    // Detail page elements removed as they are in details.html
-    /*
-    const detailImage = document.getElementById('detail-image');
-    const detailName = document.getElementById('detail-name');
-    const detailDescription = document.getElementById('detail-description');
-     const detailCategorySpan = document.querySelector('#detail-category span'); // Select the span inside for text
-     const detailVersionSpan = document.querySelector('#detail-version span');
-     const detailSizeSpan = document.querySelector('#detail-size span');
-    const detailDownloadBtn = document.getElementById('detail-download-btn');
-    const backToListBtn = document.getElementById('back-to-list-btn');
-    */
-
+    const infoContentDiv = document.getElementById('info-content');
+    const infoTitle = document.getElementById('info-title');
+    const infoDescription = document.getElementById('info-description');
+    const backFromInfoBtn = document.getElementById('back-from-info-btn');
+    const sectionTitleText = document.getElementById('section-title-text');
 
     // Sidebar elements
     const menuToggleIcon = document.getElementById('menu-toggle-icon');
     const sidebarOverlay = document.getElementById('sidebar-overlay');
     const sidebar = document.getElementById('sidebar');
     const sidebarCloseIcon = document.getElementById('sidebar-close-icon');
-    const sidebarMenuItems = document.querySelectorAll('#sidebar a[data-category]'); // Get all menu links with data-category
+    const sidebarMenuItems = document.querySelectorAll('#sidebar a[data-category]');
 
     // Search elements
     const searchToggleIcon = document.getElementById('search-toggle-icon');
@@ -664,68 +938,55 @@
     const searchInput = document.getElementById('search-input');
     const searchGoBtn = document.getElementById('search-go-btn');
 
-     // Mode Toggle Element
+    // Mode Toggle Element
     const modeToggleIcon = document.getElementById('mode-toggle-icon');
 
+    let allApps = [];
+    let currentApps = [];
+    let activeCategory = 'All';
 
-    let allApps = []; // Store all apps fetched from Firebase
-    let currentApps = []; // Store apps currently displayed (result of filtering/search)
-    let activeCategory = 'All'; // Keep track of the currently selected category
-
-
-    // --- Helper Functions ---
-
-    // Function to show a specific section and hide others
+    // Helper Functions
     function showSection(sectionId) {
-         // Hide all main content sections
         appListDiv.style.display = 'none';
-        // appDetailDiv.style.display = 'none'; // Details are in a new page
-         infoContentDiv.style.display = 'none';
-        // searchBarContainer.classList.remove('visible'); // Don't hide search on section switch, only on toggle click
+        infoContentDiv.style.display = 'none';
 
-
-        // Show the requested section
         if (sectionId === 'app-list') {
-             appListDiv.style.display = 'grid'; // Use grid for app list
-        } /* else if (sectionId === 'app-detail') {
-             // Navigation to new page handles this
-        } */ else if (sectionId === 'info-content') {
+            appListDiv.style.display = 'grid';
+        } else if (sectionId === 'info-content') {
             infoContentDiv.style.display = 'block';
         }
-         // Scroll to the top of the container when switching sections (except detail which is new page)
-         const container = document.querySelector('.container');
-         if(container && sectionId !== 'app-detail') {
-             container.scrollIntoView({ behavior: 'smooth', block: 'start' });
-         }
+        
+        const container = document.querySelector('.container');
+        if(container && sectionId !== 'app-detail') {
+            container.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
     }
 
-     // Function to update the active state in the sidebar menu
-     function updateActiveMenuItem(category) {
-         sidebarMenuItems.forEach(item => item.classList.remove('active'));
-         if (category) { // Only add active class if category is not null/undefined (e.g., during search)
+    function updateActiveMenuItem(category) {
+        sidebarMenuItems.forEach(item => item.classList.remove('active'));
+        if (category) {
             const activeItem = document.querySelector(`#sidebar a[data-category="${category}"]`);
             if (activeItem) {
                 activeItem.classList.add('active');
             }
-         }
-     }
+        }
+    }
 
-
-    // --- Mode Toggle Functionality ---
+    // Dark/Light Mode Toggle
     function toggleDarkMode() {
         const isLightMode = body.classList.contains('light-mode');
         if (isLightMode) {
             // Switch to Dark Mode
             body.classList.remove('light-mode');
             body.classList.add('dark-mode');
-            modeToggleIcon.classList.remove('fa-moon'); // Change icon to sun
+            modeToggleIcon.classList.remove('fa-moon');
             modeToggleIcon.classList.add('fa-sun');
-            localStorage.setItem('mode', 'dark'); // Save preference
+            localStorage.setItem('mode', 'dark');
         } else {
             // Switch to Light Mode
             body.classList.remove('dark-mode');
             body.classList.add('light-mode');
-            modeToggleIcon.classList.remove('fa-sun'); // Change icon to moon
+            modeToggleIcon.classList.remove('fa-sun');
             modeToggleIcon.classList.add('fa-moon');
             localStorage.setItem('mode', 'light'); // Save preference
         }
